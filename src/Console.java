@@ -18,7 +18,14 @@ public class Console implements Observer {
 	 * This renders the game engine.
 	 */
 	public void render() {
-		System.out.print("Oui ");
+		for (int i = 0; i < Config.mapHeight; i++) {
+			for (int j = 0; j < Config.mapWidth; j++)
+				System.out.print(" " + Config.map[i][j] + " ");
+
+			System.out.print('\n');
+		}
+
+		System.out.println("\n");
 	}
 	
 	@Override
