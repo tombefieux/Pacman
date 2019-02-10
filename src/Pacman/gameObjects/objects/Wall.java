@@ -1,0 +1,18 @@
+package Pacman.gameObjects.objects;
+
+import Pacman.Pacman;
+import physics.Side;
+import physics.objects.PhysicObject;
+
+/**
+ * This class represents a wall.
+ * @author Tom Befieux
+ *
+ */
+public class Wall extends PhysicObject {
+
+    @Override
+    public void collisionTriggeredOnSide(Side side, PhysicObject object) {
+        // nothing because it's a wall
+    }
+}
