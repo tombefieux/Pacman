@@ -3,8 +3,11 @@ package Pacman.gameObjects.entities;
 import Pacman.Util.Config;
 
 import Pacman.gameObjects.Direction;
+import Pacman.gameObjects.objects.Coin;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
+import physics.Side;
+import physics.objects.PhysicObject;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -15,6 +18,15 @@ import java.io.FileNotFoundException;
  *
  */
 public class Player extends GameEntity {
+
+    /**
+     * Constructor.
+     */
+    public Player() {
+        super();
+        this.setName("Player");
+        this.setDirection(Direction.LEFT);
+    }
 
     /**
      * This function loads the images of the player
@@ -46,5 +58,13 @@ public class Player extends GameEntity {
                 setVelocity(new Point2D(0, Config.PacmanVelocityValue));
                 break;
         }
+    }
+
+    // on collision
+    @Override
+    public void collisionTriggeredOnSide(Side side, PhysicObject object) {
+        super.collisionTriggeredOnSide(side, object);
+
+        // TODO: more stuff here in the future
     }
 }

@@ -4,6 +4,7 @@ import Pacman.Util.Config;
 import Pacman.Util.PacmanPatternImageLoader;
 import Pacman.gameObjects.Drawable;
 import Pacman.gameObjects.entities.Player;
+import Pacman.gameObjects.objects.Coin;
 import Pacman.gameObjects.objects.Wall;
 
 import physics.PhysicsEngine;
@@ -59,6 +60,11 @@ public class GameEngine extends Observable implements Runnable {
 			// update the physics engine
 			this.physicsEngine.update(1 / (float) Config.FPS);
 
+			// check if there are still coins
+			if(!isStillCoins()) {
+				// TODO: action when no coin
+			}
+
 			// notify that we are done
 			this.setChanged();
 			this.notifyObservers("update");
@@ -108,5 +114,35 @@ public class GameEngine extends Observable implements Runnable {
 	 */
 	public List<PhysicObject> getObjectsAround(PhysicObject object, int perimeter) {
 		return this.physicsEngine.getObjectsAround(object, perimeter);
+	}
+
+	/**
+	 * Remove a coin of the engine.
+	 * @param coin: the coin to remove
+	 */
+	public void removeCoin(Coin coin) {
+		this.physicsEngine.removeObject(coin);
+	}
+
+	/**
+	 * This function returns if there are still coins in the engine.
+	 * @return if there are still coins in the engine.
+	 */
+	public boolean isStillCoins() {
+		boolean stillCoins = false;
+		List<PhysicObject> coins = this.physicsEngine.getObjectsByName("Coin");
+		for (int i = 0; !stillCoins && i < coins.size(); i++)
+			if(!((Coin) coins.get(i)).isTaken())
+				stillCoins = true;
+
+		return stillCoins;
+	}
+
+	/**
+	 * This function turns the ghost in blue.
+	 */
+	public void turnGhostInBlue() {
+		// TODO: the function
+		System.out.println("Ghost in blue!");
 	}
 }

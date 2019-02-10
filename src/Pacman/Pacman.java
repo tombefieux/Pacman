@@ -4,6 +4,7 @@ import Pacman.Util.Config;
 import Pacman.gameObjects.Direction;
 import Pacman.gameObjects.Drawable;
 
+import Pacman.gameObjects.objects.Coin;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -132,7 +133,10 @@ public class Pacman extends Application implements Observer {
 		// draw all the objects
 		for (Drawable object : engine.getObjectsToDraw()) {
 			PhysicObject temp = (PhysicObject) object;
-			this.graphicsContext.drawImage(object.getImage(), temp.getPosition().getX(), temp.getPosition().getY());
+			if(object instanceof Coin && !((Coin) object).isTaken())
+				this.graphicsContext.drawImage(object.getImage(), temp.getPosition().getX(), temp.getPosition().getY());
+			else if(!(object instanceof Coin))
+				this.graphicsContext.drawImage(object.getImage(), temp.getPosition().getX(), temp.getPosition().getY());
 		}
 	}
 

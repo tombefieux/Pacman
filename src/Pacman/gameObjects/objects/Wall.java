@@ -11,6 +11,14 @@ import physics.objects.PhysicObject;
  */
 public class Wall extends PhysicObject {
 
+    /**
+     * Constructor.
+     */
+    public Wall() {
+        super();
+        this.setName("Wall");
+    }
+
     @Override
     public void collisionTriggeredOnSide(Side side, PhysicObject object) {
         // nothing because it's a wall

@@ -163,10 +163,10 @@ public class PhysicsEngine {
         )
             result = Side.RIGHT;
 
-        // in (second object into the first one)
-        else if(
-                (y1 + h1 <= y2 + h2 && y1 >= y2) &&
-                        (x1 <= x2 && x1 + w1 >= x2 + w2)
+        // in (first object into the second one)
+        if(
+                (y1 + h1 < y2 + h2 && y1 > y2) &&
+                        (x1 > x2 && x1 + w1 < x2 + w2)
         )
             result = Side.IN;
 

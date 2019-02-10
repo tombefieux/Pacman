@@ -14,6 +14,18 @@ public abstract class GameObject extends PhysicObject implements Drawable {
     protected Image image;         /** The image of the object. */
 
     /**
+     * Constructor.
+     */
+    public GameObject() {
+        loadImage();
+    }
+
+    /**
+     * To load the image of the object.
+     */
+    protected abstract void loadImage();
+
+    /**
      * Getter of the image to display.
      * @return the image to display
      */

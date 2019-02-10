@@ -1,7 +1,8 @@
 package Pacman.Util;
 
-import Pacman.gameObjects.Direction;
 import Pacman.gameObjects.entities.Player;
+import Pacman.gameObjects.objects.Coin;
+import Pacman.gameObjects.objects.SpecialCoin;
 import Pacman.gameObjects.objects.Wall;
 import physics.Util.ObjectsImageLoader;
 import physics.objects.PhysicObject;
@@ -17,7 +18,7 @@ public class PacmanPatternImageLoader extends ObjectsImageLoader {
      * Constructor of the class.
      */
     public PacmanPatternImageLoader() {
-        super(new int[]{18, 255});
+        super(new int[]{18, 72, 100, 255});
     }
 
     // implement the function
@@ -27,16 +28,20 @@ public class PacmanPatternImageLoader extends ObjectsImageLoader {
         PhysicObject result = null;
 
         // a wall
-        if(color == 255) {
+        if(color == 255)
             result = new Wall();
-            result.setName("Wall");
-        }
 
-        else if(color == 18) {
+        // player
+        else if(color == 18)
             result = new Player();
-            ((Player) result).setDirection(Direction.LEFT);
-            result.setName("Player");
-        }
+
+        // coin
+        else if (color == 72)
+            result = new Coin();
+
+        // special coin
+        else if (color == 100)
+            result = new SpecialCoin();
 
         return result;
     }
