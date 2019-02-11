@@ -3,7 +3,6 @@ package Pacman.gameObjects.entities;
 import Pacman.Util.Config;
 
 import Pacman.gameObjects.Direction;
-import Pacman.gameObjects.objects.Coin;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import physics.Side;

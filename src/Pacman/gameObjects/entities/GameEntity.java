@@ -232,4 +232,12 @@ public abstract class GameEntity extends PhysicEntity implements Drawable {
     public void setImage(Image image) {
         this.image = image;
     }
+
+    /**
+     * Getter for the direction.
+     * @return the direction
+     */
+    public Direction getCurrentDirection() {
+        return currentDirection;
+    }
 }

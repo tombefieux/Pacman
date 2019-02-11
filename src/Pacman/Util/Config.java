@@ -25,6 +25,8 @@ public class Config {
 
 	// Pacman
 	public static final int PacmanVelocityValue = 100;
+	public static final int leftTelportingValue = 15;
+	public static final int rightTelportingValue = 480;
 
 	// animations
 	public static final float timeBetweenAnimation = 0.1f;

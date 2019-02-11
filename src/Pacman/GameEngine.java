@@ -2,11 +2,13 @@ package Pacman;
 
 import Pacman.Util.Config;
 import Pacman.Util.PacmanPatternImageLoader;
+import Pacman.gameObjects.Direction;
 import Pacman.gameObjects.Drawable;
 import Pacman.gameObjects.entities.Player;
 import Pacman.gameObjects.objects.Coin;
 import Pacman.gameObjects.objects.Wall;
 
+import javafx.geometry.Point2D;
 import physics.PhysicsEngine;
 import physics.objects.PhysicEntity;
 import physics.objects.PhysicObject;
@@ -64,6 +66,21 @@ public class GameEngine extends Observable implements Runnable {
 			if(!isStillCoins()) {
 				// TODO: action when no coin
 			}
+
+			// if we need to teleport us to the right
+			if(this.getPlayer().getPosition().getX() < Config.leftTelportingValue &&
+				this.getPlayer().getCurrentDirection() == Direction.LEFT
+			) {
+				this.getPlayer().setPosition(new Point2D(Config.rightTelportingValue - this.getPlayer().getHitbox().getWidth(), this.getPlayer().getHitbox().getY()));
+			}
+
+			// if we need to teleport us to the left
+			else if(this.getPlayer().getPosition().getX() + this.getPlayer().getHitbox().getWidth() > Config.rightTelportingValue
+					&& this.getPlayer().getCurrentDirection() == Direction.RIGHT
+			) {
+				this.getPlayer().setPosition(new Point2D(Config.leftTelportingValue, this.getPlayer().getHitbox().getY()));
+			}
+
 
 			// notify that we are done
 			this.setChanged();
