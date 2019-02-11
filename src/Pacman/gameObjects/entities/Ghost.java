@@ -30,7 +30,7 @@ public class Ghost extends GameEntity{
         this.setDirection(getDirection());
 
         PixelReader reader = this.image.getPixelReader();
-        this.image = new WritableImage(reader, 0, ghostNb * Config.spriteSize, Config.spriteSize * 8, Config.spriteSize);
+        this.image = new WritableImage(reader, 0, (ghostNb % 4)  * Config.spriteSize, Config.spriteSize * 8, Config.spriteSize);
         ghostNb++;
     }
 
