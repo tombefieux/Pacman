@@ -25,6 +25,7 @@ public class Ghost extends GameEntity{
      */
     public Ghost() {
         super();
+        this.velocity = Config.ghostsVelocity;
         this.setName("Ghost");
         this.setDirection(getDirection());
 
@@ -54,27 +55,6 @@ public class Ghost extends GameEntity{
             this.image = new Image(new FileInputStream(Config.imagePath + "ghosts.png"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        }
-    }
-
-    @Override
-    protected void setVelocityWithDirection(Direction direction) {
-        switch (direction) {
-            case LEFT:
-                setVelocity(new Point2D(-1 * Config.ghostsVelocity, 0));
-                break;
-
-            case RIGHT:
-                setVelocity(new Point2D(Config.ghostsVelocity, 0));
-                break;
-
-            case TOP:
-                setVelocity(new Point2D(0, -1 * Config.ghostsVelocity));
-                break;
-
-            case BOTTOM:
-                setVelocity(new Point2D(0, Config.ghostsVelocity));
-                break;
         }
     }
 

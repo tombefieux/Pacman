@@ -23,6 +23,7 @@ public class Player extends GameEntity {
      */
     public Player() {
         super();
+        this.velocity = Config.PacmanVelocityValue;
         this.setName("Player");
         this.setDirection(Direction.LEFT);
     }
@@ -35,27 +36,6 @@ public class Player extends GameEntity {
             this.image = new Image(new FileInputStream(Config.imagePath + "pacman.png"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        }
-    }
-
-    // set the velocity with the direction
-    protected void setVelocityWithDirection(Direction direction) {
-        switch (direction) {
-            case LEFT:
-                setVelocity(new Point2D(-1 * Config.PacmanVelocityValue, 0));
-                break;
-
-            case RIGHT:
-                setVelocity(new Point2D(Config.PacmanVelocityValue, 0));
-                break;
-
-            case TOP:
-                setVelocity(new Point2D(0, -1 * Config.PacmanVelocityValue));
-                break;
-
-            case BOTTOM:
-                setVelocity(new Point2D(0, Config.PacmanVelocityValue));
-                break;
         }
     }
 

@@ -29,6 +29,7 @@ public abstract class GameEntity extends PhysicEntity implements Drawable {
     protected Image image;                          /** The sprites of the entity. */
     protected Direction currentDirection = null;    /** The current direction of the entity. */
     protected Direction wantToGoTo = null;          /** The direction where the entity want to go when it'll be possible. */
+    protected float velocity = 50;                  /** The velocity of the entity. */
 
     private boolean isToFirstImage = true;          /** If it's to the first image to be displayed. */
     private float addedTime = 0;                    /** The added time for animation. */
@@ -227,7 +228,25 @@ public abstract class GameEntity extends PhysicEntity implements Drawable {
      * Set the good velocity according to the direction.
      * @param direction: the direction
      */
-    protected abstract void setVelocityWithDirection(Direction direction);
+    protected void setVelocityWithDirection(Direction direction) {
+        switch (direction) {
+            case LEFT:
+                setVelocity(new Point2D(-1 * this.velocity, 0));
+                break;
+
+            case RIGHT:
+                setVelocity(new Point2D(this.velocity, 0));
+                break;
+
+            case TOP:
+                setVelocity(new Point2D(0, -1 * this.velocity));
+                break;
+
+            case BOTTOM:
+                setVelocity(new Point2D(0, this.velocity));
+                break;
+        }
+    }
 
     /**
      * Setter of the image.
