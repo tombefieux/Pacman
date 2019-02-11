@@ -1,5 +1,6 @@
 package Pacman.Util;
 
+import Pacman.gameObjects.entities.Ghost;
 import Pacman.gameObjects.entities.Player;
 import Pacman.gameObjects.objects.Coin;
 import Pacman.gameObjects.objects.SpecialCoin;
@@ -18,7 +19,7 @@ public class PacmanPatternImageLoader extends ObjectsImageLoader {
      * Constructor of the class.
      */
     public PacmanPatternImageLoader() {
-        super(new int[]{18, 72, 100, 255});
+        super(new int[]{18, 72, 100, 199, 255});
     }
 
     // implement the function
@@ -42,6 +43,10 @@ public class PacmanPatternImageLoader extends ObjectsImageLoader {
         // special coin
         else if (color == 100)
             result = new SpecialCoin();
+
+        // ghost
+        else if (color == 199)
+            result = new Ghost();
 
         return result;
     }

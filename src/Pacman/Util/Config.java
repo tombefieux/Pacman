@@ -28,6 +28,9 @@ public class Config {
 	public static final int leftTelportingValue = 15;
 	public static final int rightTelportingValue = 480;
 
+	// ghosts
+    public static final int ghostsVelocity = 110;
+
 	// animations
 	public static final float timeBetweenAnimation = 0.1f;
 

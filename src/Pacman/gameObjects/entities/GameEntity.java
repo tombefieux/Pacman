@@ -67,6 +67,7 @@ public abstract class GameEntity extends PhysicEntity implements Drawable {
                 case RIGHT:
                     for (PhysicObject object: objectsAround) {
                         if(
+                            object instanceof Wall &&
                             this.getHitbox().getX() + this.getHitbox().getWidth() + 5 > object.getHitbox().getX() &&
                             this.getHitbox().getX() + this.getHitbox().getWidth() + 5 < object.getHitbox().getX() + object.getHitbox().getWidth() &&
                             this.getHitbox().getY() < object.getHitbox().getY() + object.getHitbox().getHeight() + acceptableMargin &&
@@ -81,6 +82,7 @@ public abstract class GameEntity extends PhysicEntity implements Drawable {
                 case LEFT:
                     for (PhysicObject object: objectsAround) {
                         if(
+                            object instanceof Wall &&
                             this.getHitbox().getX() - 5 > object.getHitbox().getX() &&
                             this.getHitbox().getX() - 5 < object.getHitbox().getX() + object.getHitbox().getWidth() &&
                             this.getHitbox().getY() < object.getHitbox().getY() + object.getHitbox().getHeight() + acceptableMargin &&
@@ -95,6 +97,7 @@ public abstract class GameEntity extends PhysicEntity implements Drawable {
                 case TOP:
                     for (PhysicObject object: objectsAround) {
                         if(
+                            object instanceof Wall &&
                             this.getHitbox().getY() - 5 > object.getHitbox().getY() &&
                             this.getHitbox().getY() - 5 < object.getHitbox().getY() + object.getHitbox().getHeight() &&
                             this.getHitbox().getX() < object.getHitbox().getX() + object.getHitbox().getWidth() + acceptableMargin &&
@@ -109,6 +112,7 @@ public abstract class GameEntity extends PhysicEntity implements Drawable {
                 case BOTTOM:
                     for (PhysicObject object: objectsAround) {
                         if(
+                            object instanceof Wall &&
                             this.getHitbox().getY() + this.getHitbox().getHeight() + 5 > object.getHitbox().getY() &&
                             this.getHitbox().getY() + this.getHitbox().getHeight() + 5 < object.getHitbox().getY() + object.getHitbox().getHeight() &&
                             this.getHitbox().getX() < object.getHitbox().getX() + object.getHitbox().getWidth() + acceptableMargin &&
