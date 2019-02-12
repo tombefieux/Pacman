@@ -1,6 +1,5 @@
-package Pacman.gameObjects.objects;
+package Pacman.model.objects;
 
-import Pacman.Pacman;
 import physics.Side;
 import physics.objects.PhysicObject;
 

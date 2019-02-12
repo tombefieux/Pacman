@@ -1,14 +1,8 @@
-package Pacman.gameObjects.entities;
+package Pacman.model.entities;
 
 import Pacman.Util.Config;
-import Pacman.gameObjects.Direction;
-import javafx.geometry.Point2D;
-import javafx.scene.image.Image;
-import javafx.scene.image.PixelReader;
-import javafx.scene.image.WritableImage;
+import Pacman.model.Direction;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -18,7 +12,8 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class Ghost extends GameEntity{
 
-    private static int ghostNb = 0;
+    private static int currentGhostNb = 0;          /** The counter for ghost number */
+    private int ghostNumber;                        /** The number of the ghost (for the sprite sheet). */
 
     /**
      * Constructor.
@@ -28,10 +23,9 @@ public class Ghost extends GameEntity{
         this.velocity = Config.ghostsVelocity;
         this.setName("Ghost");
         this.setDirection(getDirection());
+        this.ghostNumber = (currentGhostNb % 4);
 
-        PixelReader reader = this.image.getPixelReader();
-        this.image = new WritableImage(reader, 0, (ghostNb % 4)  * Config.spriteSize, Config.spriteSize * 8, Config.spriteSize);
-        ghostNb++;
+        currentGhostNb++;
     }
 
     @Override
@@ -47,15 +41,6 @@ public class Ghost extends GameEntity{
         }
 
         super.update(delta);
-    }
-
-    @Override
-    protected void loadImage() {
-        try {
-            this.image = new Image(new FileInputStream(Config.imagePath + "ghosts.png"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -83,5 +68,13 @@ public class Ghost extends GameEntity{
         }
 
         return result;
+    }
+
+    /**
+     * This function returns the ghost number.
+     * @return the ghost number
+     */
+    public int getGhostNumber() {
+        return ghostNumber;
     }
 }

@@ -1,6 +1,4 @@
-package Pacman.gameObjects;
-
-import Pacman.Pacman;
+package Pacman.model;
 
 /**
  * This enum represents a direction for the entities.

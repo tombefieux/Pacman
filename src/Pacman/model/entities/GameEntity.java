@@ -1,15 +1,12 @@
-package Pacman.gameObjects.entities;
+package Pacman.model.entities;
 
 import Pacman.Pacman;
 import Pacman.Util.Config;
-import Pacman.gameObjects.Direction;
-import Pacman.gameObjects.Drawable;
+import Pacman.model.Direction;
+import Pacman.model.Drawable;
 
-import Pacman.gameObjects.objects.Wall;
+import Pacman.model.objects.Wall;
 import javafx.geometry.Point2D;
-import javafx.scene.image.Image;
-import javafx.scene.image.PixelReader;
-import javafx.scene.image.WritableImage;
 
 import physics.Side;
 import physics.objects.PhysicEntity;
@@ -26,25 +23,12 @@ import java.util.List;
  */
 public abstract class GameEntity extends PhysicEntity implements Drawable {
 
-    protected Image image;                          /** The sprites of the entity. */
     protected Direction currentDirection = null;    /** The current direction of the entity. */
     protected Direction wantToGoTo = null;          /** The direction where the entity want to go when it'll be possible. */
     protected float velocity = 50;                  /** The velocity of the entity. */
 
     private boolean isToFirstImage = true;          /** If it's to the first image to be displayed. */
     private float addedTime = 0;                    /** The added time for animation. */
-
-    /**
-     * Constructor.
-     */
-    public GameEntity() {
-        loadImage();
-    }
-
-    /**
-     * To load the image of the entity.
-     */
-    protected abstract void loadImage();
 
     // add the animation
     public void update(float delta) {
@@ -135,44 +119,19 @@ public abstract class GameEntity extends PhysicEntity implements Drawable {
         }
     }
 
-    /**
-     * Getter of the image to display to draw the entity.
-     * @return the image to display
-     */
-    public Image getImage() {
-        Image result = null;
-        PixelReader reader = this.image.getPixelReader();
+    // implement drawable function
+    public int getImageIndexInSpriteSheet() {
+        int result = 0;
 
-        // set the good image according to the direction
-        switch (currentDirection) {
-            case TOP:
-                if (isToFirstImage || !isMoving())
-                    result = new WritableImage(reader, 0, 0, Config.spriteSize, Config.spriteSize);
-                else
-                    result = new WritableImage(reader, Config.spriteSize, 0, Config.spriteSize, Config.spriteSize);
-                break;
+        if(currentDirection == Direction.RIGHT)
+            result += 2;
+        else if(currentDirection == Direction.BOTTOM)
+            result += 4;
+        else if(currentDirection == Direction.LEFT)
+            result += 6;
 
-            case RIGHT:
-                if (isToFirstImage || !isMoving())
-                    result = new WritableImage(reader, Config.spriteSize * 2, 0, Config.spriteSize, Config.spriteSize);
-                else
-                    result = new WritableImage(reader, Config.spriteSize * 3, 0, Config.spriteSize, Config.spriteSize);
-                break;
-
-            case BOTTOM:
-                if (isToFirstImage || !isMoving())
-                    result = new WritableImage(reader, Config.spriteSize * 4, 0, Config.spriteSize, Config.spriteSize);
-                else
-                    result = new WritableImage(reader, Config.spriteSize * 5, 0, Config.spriteSize, Config.spriteSize);
-                break;
-
-            case LEFT:
-                if (isToFirstImage || !isMoving())
-                    result = new WritableImage(reader, Config.spriteSize * 6, 0, Config.spriteSize, Config.spriteSize);
-                else
-                    result = new WritableImage(reader, Config.spriteSize * 7, 0, Config.spriteSize, Config.spriteSize);
-                break;
-        }
+        if(!isToFirstImage && isMoving())
+            result++;
 
         return result;
     }
@@ -246,14 +205,6 @@ public abstract class GameEntity extends PhysicEntity implements Drawable {
                 setVelocity(new Point2D(0, this.velocity));
                 break;
         }
-    }
-
-    /**
-     * Setter of the image.
-     * @param image: the new image
-     */
-    public void setImage(Image image) {
-        this.image = image;
     }
 
     /**

@@ -1,13 +1,8 @@
-package Pacman.gameObjects.objects;
+package Pacman.model.objects;
 
-import Pacman.Util.Config;
-import Pacman.gameObjects.entities.Player;
-import javafx.scene.image.Image;
+import Pacman.model.entities.Player;
 import physics.Side;
 import physics.objects.PhysicObject;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 /**
  * This class represents a coin.
@@ -24,16 +19,6 @@ public class Coin extends GameObject {
     public Coin() {
         super();
         this.setName("Coin");
-    }
-
-    // load the image
-    @Override
-    protected void loadImage() {
-        try {
-            this.image = new Image(new FileInputStream(Config.imagePath + "coin.png"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     // collision

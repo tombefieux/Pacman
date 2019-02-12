@@ -1,10 +1,10 @@
 package Pacman.Util;
 
-import Pacman.gameObjects.entities.Ghost;
-import Pacman.gameObjects.entities.Player;
-import Pacman.gameObjects.objects.Coin;
-import Pacman.gameObjects.objects.SpecialCoin;
-import Pacman.gameObjects.objects.Wall;
+import Pacman.model.entities.Ghost;
+import Pacman.model.entities.Player;
+import Pacman.model.objects.Coin;
+import Pacman.model.objects.SpecialCoin;
+import Pacman.model.objects.Wall;
 import physics.Util.ObjectsImageLoader;
 import physics.objects.PhysicObject;
 

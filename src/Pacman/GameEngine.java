@@ -2,12 +2,12 @@ package Pacman;
 
 import Pacman.Util.Config;
 import Pacman.Util.PacmanPatternImageLoader;
-import Pacman.gameObjects.Direction;
-import Pacman.gameObjects.Drawable;
-import Pacman.gameObjects.entities.GameEntity;
-import Pacman.gameObjects.entities.Player;
-import Pacman.gameObjects.objects.Coin;
-import Pacman.gameObjects.objects.Wall;
+import Pacman.model.Direction;
+import Pacman.model.Drawable;
+import Pacman.model.entities.GameEntity;
+import Pacman.model.entities.Player;
+import Pacman.model.objects.Coin;
+import Pacman.model.objects.Wall;
 
 import javafx.geometry.Point2D;
 import physics.PhysicsEngine;

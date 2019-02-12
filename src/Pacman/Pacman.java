@@ -1,10 +1,13 @@
 package Pacman;
 
 import Pacman.Util.Config;
-import Pacman.gameObjects.Direction;
-import Pacman.gameObjects.Drawable;
+import Pacman.model.Direction;
+import Pacman.model.Drawable;
 
-import Pacman.gameObjects.objects.Coin;
+import Pacman.model.entities.Ghost;
+import Pacman.model.entities.Player;
+import Pacman.model.objects.Coin;
+import Pacman.model.objects.SpecialCoin;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -13,6 +16,8 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
@@ -35,7 +40,12 @@ public class Pacman extends Application implements Observer {
 
 	public static GameEngine engine;							/** The game engine. */
 	private GraphicsContext graphicsContext;					/** The graphic context. */
+
 	private Image backgroundImage;								/** The background image. */
+    private Image pacmanSpriteSheet;							/** The Pacman sprite sheet image. */
+    private Image ghostsSpriteSheet;						    /** The ghosts sprite sheet image. */
+    private Image coinSpriteSheet;							    /** The coin sprite image. */
+    private Image specialCoinSpriteSheet;					    /** The special coin sprite image. */
 
 	/**
 	 * The main function to start the application.
@@ -50,8 +60,8 @@ public class Pacman extends Application implements Observer {
 	 * @param theStage: stage
 	 */
 	public void start(Stage theStage) {
-		// load images
-		loadImages();
+        // load images
+        loadImages();
 
 		// we start the window
 		startTheWindow(theStage);
@@ -66,6 +76,11 @@ public class Pacman extends Application implements Observer {
 	private void loadImages() {
 		try {
 			this.backgroundImage = new Image(new FileInputStream(Config.imagePath + "background.png"));
+            this.pacmanSpriteSheet = new Image(new FileInputStream(Config.imagePath + "pacman.png"));
+            this.ghostsSpriteSheet = new Image(new FileInputStream(Config.imagePath + "ghosts.png"));
+            this.coinSpriteSheet = new Image(new FileInputStream(Config.imagePath + "coin.png"));
+            this.specialCoinSpriteSheet = new Image(new FileInputStream(Config.imagePath + "specialCoin.png"));
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -133,10 +148,44 @@ public class Pacman extends Application implements Observer {
 		// draw all the objects
 		for (Drawable object : engine.getObjectsToDraw()) {
 			PhysicObject temp = (PhysicObject) object;
-			if(object instanceof Coin && !((Coin) object).isTaken())
-				this.graphicsContext.drawImage(object.getImage(), temp.getPosition().getX(), temp.getPosition().getY());
-			else if(!(object instanceof Coin))
-				this.graphicsContext.drawImage(object.getImage(), temp.getPosition().getX(), temp.getPosition().getY());
+
+			// player
+			if(object instanceof Player) {
+                PixelReader reader = this.pacmanSpriteSheet.getPixelReader();
+                this.graphicsContext.drawImage(
+                    new WritableImage(
+                        reader,
+                        object.getImageIndexInSpriteSheet() * Config.spriteSize,
+                        0,
+                        Config.spriteSize, Config.spriteSize
+                    ),
+                    temp.getPosition().getX(),
+                    temp.getPosition().getY()
+                );
+            }
+
+			// ghost
+			else if(object instanceof Ghost) {
+                PixelReader reader = this.ghostsSpriteSheet.getPixelReader();
+                this.graphicsContext.drawImage(
+                        new WritableImage(
+                                reader,
+                                object.getImageIndexInSpriteSheet() * Config.spriteSize,
+                                ((Ghost) temp).getGhostNumber() * Config.spriteSize,
+                                Config.spriteSize, Config.spriteSize
+                        ),
+                        temp.getPosition().getX(),
+                        temp.getPosition().getY()
+                );
+            }
+
+			// coin or special coin
+            else if(object instanceof Coin && !((Coin) object).isTaken()) {
+                if(object instanceof SpecialCoin)
+                    this.graphicsContext.drawImage(this.specialCoinSpriteSheet, temp.getPosition().getX(), temp.getPosition().getY());
+                else
+                    this.graphicsContext.drawImage(this.coinSpriteSheet, temp.getPosition().getX(), temp.getPosition().getY());
+            }
 		}
 	}
 
