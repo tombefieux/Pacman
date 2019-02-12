@@ -4,6 +4,7 @@ import Pacman.Util.Config;
 import Pacman.Util.PacmanPatternImageLoader;
 import Pacman.gameObjects.Direction;
 import Pacman.gameObjects.Drawable;
+import Pacman.gameObjects.entities.GameEntity;
 import Pacman.gameObjects.entities.Player;
 import Pacman.gameObjects.objects.Coin;
 import Pacman.gameObjects.objects.Wall;
@@ -62,25 +63,30 @@ public class GameEngine extends Observable implements Runnable {
 			// update the physics engine
 			this.physicsEngine.update(1 / (float) Config.FPS);
 
-			// check if there are still coins
-			if(!isStillCoins()) {
-				// TODO: action when no coin
-			}
+            // teleport all the entities
+            for (PhysicObject object : this.physicsEngine.getObjects()) {
+                if(object instanceof GameEntity) {
+                    GameEntity entity = (GameEntity) object;
+                    // if we need to teleport us to the right
+                    if(entity.getPosition().getX() < Config.leftTelportingValue &&
+                            entity.getCurrentDirection() == Direction.LEFT
+                    ) {
+                        entity.setPosition(new Point2D(Config.rightTelportingValue - entity.getHitbox().getWidth(), entity.getHitbox().getY()));
+                    }
 
-			// if we need to teleport us to the right
-			if(this.getPlayer().getPosition().getX() < Config.leftTelportingValue &&
-				this.getPlayer().getCurrentDirection() == Direction.LEFT
-			) {
-				this.getPlayer().setPosition(new Point2D(Config.rightTelportingValue - this.getPlayer().getHitbox().getWidth(), this.getPlayer().getHitbox().getY()));
-			}
+                    // if we need to teleport us to the left
+                    else if(entity.getPosition().getX() + entity.getHitbox().getWidth() > Config.rightTelportingValue
+                            && entity.getCurrentDirection() == Direction.RIGHT
+                    ) {
+                        entity.setPosition(new Point2D(Config.leftTelportingValue, entity.getHitbox().getY()));
+                    }
+                }
+            }
 
-			// if we need to teleport us to the left
-			else if(this.getPlayer().getPosition().getX() + this.getPlayer().getHitbox().getWidth() > Config.rightTelportingValue
-					&& this.getPlayer().getCurrentDirection() == Direction.RIGHT
-			) {
-				this.getPlayer().setPosition(new Point2D(Config.leftTelportingValue, this.getPlayer().getHitbox().getY()));
-			}
-
+            // check if there are still coins
+            if(!isStillCoins()) {
+                // TODO: action when no coin
+            }
 
 			// notify that we are done
 			this.setChanged();
