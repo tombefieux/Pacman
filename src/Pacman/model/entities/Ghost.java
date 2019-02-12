@@ -3,6 +3,7 @@ package Pacman.model.entities;
 import Pacman.Util.Config;
 import Pacman.model.Direction;
 
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -14,6 +15,7 @@ public class Ghost extends GameEntity{
 
     private static int currentGhostNb = 0;          /** The counter for ghost number */
     private int ghostNumber;                        /** The number of the ghost (for the sprite sheet). */
+    private List<Direction> directions = null;
 
     /**
      * Constructor.
@@ -35,12 +37,35 @@ public class Ghost extends GameEntity{
             Direction direction;
             do {
                  direction = getDirection();
-            } while(direction == this.currentDirection);
+            } while(direction == this.currentDirection || areOpposite(direction, this.currentDirection));
 
             this.setDirection(direction);
         }
 
         super.update(delta);
+
+        // if we have the possibility to change of direction
+        if(this.directions != null) {
+            List<Direction> directions = getPossibleDirections();
+            if (!this.directions.containsAll(directions)) {
+
+                // do it really want to change of direction?
+                // yes!
+                if(ThreadLocalRandom.current().nextInt(0, 1 + 1) == 1) {
+                    // get the other directions
+                    for (Direction direction: this.directions)
+                        directions.remove(direction);
+
+                    // apply the new direction randomly if there are several
+                    int index = ThreadLocalRandom.current().nextInt(0, directions.size());
+
+                    // change the position of ghost if it's not the opposite of the current one
+                    if (canGoInADirection(directions.get(index), true) && !areOpposite(this.currentDirection, directions.get(index)))
+                        this.setDirection(directions.get(index));
+                }
+            }
+        }
+        this.directions = getPossibleDirections();
     }
 
     /**

@@ -12,6 +12,7 @@ import physics.Side;
 import physics.objects.PhysicEntity;
 import physics.objects.PhysicObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -43,80 +44,122 @@ public abstract class GameEntity extends PhysicEntity implements Drawable {
 
         // if we want to go to another direction, see if we can
         if(this.wantToGoTo != null) {
-            List<PhysicObject> objectsAround = Pacman.engine.getObjectsAround(this, 5);
-            boolean weCanGo = false;
-            final int acceptableMargin = 5;
             Point2D savedPosition = this.getPosition();
-
-            switch (this.wantToGoTo) {
-                case RIGHT:
-                    for (PhysicObject object: objectsAround) {
-                        if(
-                            object instanceof Wall &&
-                            this.getHitbox().getX() + this.getHitbox().getWidth() + 5 > object.getHitbox().getX() &&
-                            this.getHitbox().getX() + this.getHitbox().getWidth() + 5 < object.getHitbox().getX() + object.getHitbox().getWidth() &&
-                            this.getHitbox().getY() < object.getHitbox().getY() + object.getHitbox().getHeight() + acceptableMargin &&
-                            this.getHitbox().getY() > object.getHitbox().getY() + object.getHitbox().getHeight() - acceptableMargin
-                        ) {
-                            this.setPosition(new Point2D(this.getPosition().getX(), object.getHitbox().getY() + object.getHitbox().getHeight()));
-                            weCanGo = true;
-                        }
-                    }
-                    break;
-
-                case LEFT:
-                    for (PhysicObject object: objectsAround) {
-                        if(
-                            object instanceof Wall &&
-                            this.getHitbox().getX() - 5 > object.getHitbox().getX() &&
-                            this.getHitbox().getX() - 5 < object.getHitbox().getX() + object.getHitbox().getWidth() &&
-                            this.getHitbox().getY() < object.getHitbox().getY() + object.getHitbox().getHeight() + acceptableMargin &&
-                            this.getHitbox().getY() > object.getHitbox().getY() + object.getHitbox().getHeight() - acceptableMargin
-                        ) {
-                            this.setPosition(new Point2D(this.getPosition().getX(), object.getHitbox().getY() + object.getHitbox().getHeight()));
-                            weCanGo = true;
-                        }
-                    }
-                    break;
-
-                case TOP:
-                    for (PhysicObject object: objectsAround) {
-                        if(
-                            object instanceof Wall &&
-                            this.getHitbox().getY() - 5 > object.getHitbox().getY() &&
-                            this.getHitbox().getY() - 5 < object.getHitbox().getY() + object.getHitbox().getHeight() &&
-                            this.getHitbox().getX() < object.getHitbox().getX() + object.getHitbox().getWidth() + acceptableMargin &&
-                            this.getHitbox().getX() > object.getHitbox().getX() + object.getHitbox().getWidth() - acceptableMargin
-                        ) {
-                            this.setPosition(new Point2D(object.getHitbox().getX() + object.getHitbox().getWidth(), this.getPosition().getY()));
-                            weCanGo = true;
-                        }
-                    }
-                    break;
-
-                case BOTTOM:
-                    for (PhysicObject object: objectsAround) {
-                        if(
-                            object instanceof Wall &&
-                            this.getHitbox().getY() + this.getHitbox().getHeight() + 5 > object.getHitbox().getY() &&
-                            this.getHitbox().getY() + this.getHitbox().getHeight() + 5 < object.getHitbox().getY() + object.getHitbox().getHeight() &&
-                            this.getHitbox().getX() < object.getHitbox().getX() + object.getHitbox().getWidth() + acceptableMargin &&
-                            this.getHitbox().getX() > object.getHitbox().getX() + object.getHitbox().getWidth() - acceptableMargin
-                        ) {
-                            this.setPosition(new Point2D(object.getHitbox().getX() + object.getHitbox().getWidth(), this.getPosition().getY()));
-                            weCanGo = true;
-                        }
-                    }
-                    break;
-            }
-
-            if(weCanGo) {
+            if(canGoInADirection(this.wantToGoTo, true)) {
                 Direction savedWantToGo = this.wantToGoTo;
                 setDirection(this.wantToGoTo);
                 if(this.currentDirection != savedWantToGo) // check that we are in the good direction
                     this.setPosition(savedPosition);
             }
         }
+    }
+
+    /**
+     * This function returns if we can go in a direction or not. You can choose if you want
+     * to change the position of the entity so it can go in this direction.
+     * @param direction: the direction to check
+     * @param changeThePosition: if we want to change the direction
+     * @return: if the direction is possible or not.
+     */
+    public boolean canGoInADirection(Direction direction, boolean changeThePosition) {
+        List<PhysicObject> objectsAround = Pacman.engine.getObjectsAround(this, 5);
+        boolean weCanGo = false;
+        final int acceptableMargin = 5;
+
+        switch (direction) {
+            case RIGHT:
+                for (PhysicObject object: objectsAround) {
+                    if(
+                            object instanceof Wall &&
+                                    this.getHitbox().getX() + this.getHitbox().getWidth() + 5 > object.getHitbox().getX() &&
+                                    this.getHitbox().getX() + this.getHitbox().getWidth() + 5 < object.getHitbox().getX() + object.getHitbox().getWidth() &&
+                                    this.getHitbox().getY() < object.getHitbox().getY() + object.getHitbox().getHeight() + acceptableMargin &&
+                                    this.getHitbox().getY() > object.getHitbox().getY() + object.getHitbox().getHeight() - acceptableMargin
+                    ) {
+                        if(changeThePosition)
+                            this.setPosition(new Point2D(this.getPosition().getX(), object.getHitbox().getY() + object.getHitbox().getHeight()));
+                        weCanGo = true;
+                    }
+                }
+                break;
+
+            case LEFT:
+                for (PhysicObject object: objectsAround) {
+                    if(
+                            object instanceof Wall &&
+                                    this.getHitbox().getX() - 5 > object.getHitbox().getX() &&
+                                    this.getHitbox().getX() - 5 < object.getHitbox().getX() + object.getHitbox().getWidth() &&
+                                    this.getHitbox().getY() < object.getHitbox().getY() + object.getHitbox().getHeight() + acceptableMargin &&
+                                    this.getHitbox().getY() > object.getHitbox().getY() + object.getHitbox().getHeight() - acceptableMargin
+                    ) {
+                        if(changeThePosition)
+                            this.setPosition(new Point2D(this.getPosition().getX(), object.getHitbox().getY() + object.getHitbox().getHeight()));
+                        weCanGo = true;
+                    }
+                }
+                break;
+
+            case TOP:
+                for (PhysicObject object: objectsAround) {
+                    if(
+                            object instanceof Wall &&
+                                    this.getHitbox().getY() - 5 > object.getHitbox().getY() &&
+                                    this.getHitbox().getY() - 5 < object.getHitbox().getY() + object.getHitbox().getHeight() &&
+                                    this.getHitbox().getX() < object.getHitbox().getX() + object.getHitbox().getWidth() + acceptableMargin &&
+                                    this.getHitbox().getX() > object.getHitbox().getX() + object.getHitbox().getWidth() - acceptableMargin
+                    ) {
+                        if(changeThePosition)
+                            this.setPosition(new Point2D(object.getHitbox().getX() + object.getHitbox().getWidth(), this.getPosition().getY()));
+                        weCanGo = true;
+                    }
+                }
+                break;
+
+            case BOTTOM:
+                for (PhysicObject object: objectsAround) {
+                    if(
+                            object instanceof Wall &&
+                                    this.getHitbox().getY() + this.getHitbox().getHeight() + 5 > object.getHitbox().getY() &&
+                                    this.getHitbox().getY() + this.getHitbox().getHeight() + 5 < object.getHitbox().getY() + object.getHitbox().getHeight() &&
+                                    this.getHitbox().getX() < object.getHitbox().getX() + object.getHitbox().getWidth() + acceptableMargin &&
+                                    this.getHitbox().getX() > object.getHitbox().getX() + object.getHitbox().getWidth() - acceptableMargin
+                    ) {
+                        if(changeThePosition)
+                            this.setPosition(new Point2D(object.getHitbox().getX() + object.getHitbox().getWidth(), this.getPosition().getY()));
+                        weCanGo = true;
+                    }
+                }
+                break;
+        }
+
+        return weCanGo;
+    }
+
+    /**
+     * This function returns if two directions are opposite.
+     * @param dir1: the first direction
+     * @param dir2: the second direction
+     * @return if they are opposite
+     */
+    public static boolean areOpposite(Direction dir1, Direction dir2) {
+        return (
+            (dir1 == Direction.LEFT && dir2 == Direction.RIGHT) ||
+            (dir1 == Direction.RIGHT && dir2 == Direction.LEFT) ||
+            (dir1 == Direction.TOP && dir2 == Direction.BOTTOM) ||
+            (dir1 == Direction.BOTTOM && dir2 == Direction.TOP)
+        );
+    }
+
+    /**
+     * This function returns the possible directions for the entity.
+     * @return: the possible directions
+     */
+    public List<Direction> getPossibleDirections() {
+        List<Direction> result = new ArrayList<>();
+        for (Direction direction: Direction.values())
+            if(canGoInADirection(direction, false))
+                result.add(direction);
+        return result;
     }
 
     // implement drawable function
