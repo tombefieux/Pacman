@@ -44,6 +44,7 @@ public class Pacman extends Application implements Observer {
 	private Image backgroundImage;								/** The background image. */
     private Image pacmanSpriteSheet;							/** The Pacman sprite sheet image. */
     private Image ghostsSpriteSheet;						    /** The ghosts sprite sheet image. */
+    private Image blueGhostsSpriteSheet;						/** The blue ghosts sprite sheet image. */
     private Image coinSpriteSheet;							    /** The coin sprite image. */
     private Image specialCoinSpriteSheet;					    /** The special coin sprite image. */
 
@@ -78,6 +79,7 @@ public class Pacman extends Application implements Observer {
 			this.backgroundImage = new Image(new FileInputStream(Config.imagePath + "background.png"));
             this.pacmanSpriteSheet = new Image(new FileInputStream(Config.imagePath + "pacman.png"));
             this.ghostsSpriteSheet = new Image(new FileInputStream(Config.imagePath + "ghosts.png"));
+            this.blueGhostsSpriteSheet = new Image(new FileInputStream(Config.imagePath + "blueAndWhiteGhosts.png"));
             this.coinSpriteSheet = new Image(new FileInputStream(Config.imagePath + "coin.png"));
             this.specialCoinSpriteSheet = new Image(new FileInputStream(Config.imagePath + "specialCoin.png"));
 
@@ -166,17 +168,35 @@ public class Pacman extends Application implements Observer {
 
 			// ghost
 			else if(object instanceof Ghost) {
-                PixelReader reader = this.ghostsSpriteSheet.getPixelReader();
-                this.graphicsContext.drawImage(
-                        new WritableImage(
-                                reader,
-                                object.getImageIndexInSpriteSheet() * Config.spriteSize,
-                                ((Ghost) temp).getGhostNumber() * Config.spriteSize,
-                                Config.spriteSize, Config.spriteSize
-                        ),
-                        temp.getPosition().getX(),
-                        temp.getPosition().getY()
-                );
+			    // if blue
+			    if(((Ghost) object).isBlue()) {
+                    PixelReader reader = this.blueGhostsSpriteSheet.getPixelReader();
+                    this.graphicsContext.drawImage(
+                            new WritableImage(
+                                    reader,
+                                    object.getImageIndexInSpriteSheet() * Config.spriteSize,
+                                    0,
+                                    Config.spriteSize, Config.spriteSize
+                            ),
+                            temp.getPosition().getX(),
+                            temp.getPosition().getY()
+                    );
+                }
+
+			    // if normal
+                else {
+                    PixelReader reader = this.ghostsSpriteSheet.getPixelReader();
+                    this.graphicsContext.drawImage(
+                            new WritableImage(
+                                    reader,
+                                    object.getImageIndexInSpriteSheet() * Config.spriteSize,
+                                    ((Ghost) temp).getGhostNumber() * Config.spriteSize,
+                                    Config.spriteSize, Config.spriteSize
+                            ),
+                            temp.getPosition().getX(),
+                            temp.getPosition().getY()
+                    );
+                }
             }
 
 			// coin or special coin

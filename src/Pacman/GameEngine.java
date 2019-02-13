@@ -5,6 +5,7 @@ import Pacman.Util.PacmanPatternImageLoader;
 import Pacman.model.Direction;
 import Pacman.model.Drawable;
 import Pacman.model.entities.GameEntity;
+import Pacman.model.entities.Ghost;
 import Pacman.model.entities.Player;
 import Pacman.model.objects.Coin;
 import Pacman.model.objects.Gate;
@@ -30,6 +31,8 @@ import java.util.Observable;
 public class GameEngine extends Observable implements Runnable {
 
 	private PhysicsEngine physicsEngine;						/** The physics engine of the game. */
+	public int ghostsKilledNb = 0;								/** The number of ghosts killed in one blue sequence. */
+	public int ghostInBlueThreadSemaphore = 0;					/** A counter to know if there are other threads running. */
 
 	/**
 	 * Constructor of the class.
@@ -174,7 +177,49 @@ public class GameEngine extends Observable implements Runnable {
 	 * This function turns the ghost in blue.
 	 */
 	public void turnGhostInBlue() {
-		// TODO: the function
-		System.out.println("Ghost in blue!");
+
+		// add one to the semaphore
+		ghostInBlueThreadSemaphore++;
+
+		// turn the ghosts in blue
+		for (PhysicObject ghost: this.physicsEngine.getObjectsByName("Ghost"))
+			((Ghost) ghost).turnInBlue();
+
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					int currentKilledGhost = 0;
+					Thread.sleep(Config.timeInBlue * 1000 - Config.endAnimationTime * 1000);
+
+					// check if there are killed ghosts to wait again
+					while (currentKilledGhost < ghostsKilledNb) {
+						int timeToWait = (ghostsKilledNb - currentKilledGhost) * Config.timeToWaitWhenDead;
+						currentKilledGhost = ghostsKilledNb;
+
+						Thread.sleep(timeToWait);
+					}
+
+					// turn ghosts in end animation if we are the last thread running for blue ghosts
+					if(ghostInBlueThreadSemaphore == 1) {
+						// end animation
+						for (PhysicObject ghost: physicsEngine.getObjectsByName("Ghost"))
+							((Ghost) ghost).lunchEndBlueAnimation();
+
+						Thread.sleep(Config.endAnimationTime * 1000);
+
+						// turn ghosts in normal if we are the last thread running for blue ghosts
+						if(ghostInBlueThreadSemaphore == 1)
+							for (PhysicObject ghost : physicsEngine.getObjectsByName("Ghost"))
+								((Ghost) ghost).turnInNormal();
+					}
+
+					ghostInBlueThreadSemaphore--;	// decrease the semaphore
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		t.start();
 	}
 }

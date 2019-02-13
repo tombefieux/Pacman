@@ -189,7 +189,7 @@ public abstract class GameEntity extends PhysicEntity implements Drawable {
             if(side == Side.TOP || side == Side.BOTTOM) {
                 this.setVelocity(new Point2D(this.getVelocity().getX(), 0));
 
-                if(side == Side.TOP)
+                if(side == Side.TOP && !(object instanceof Gate))
                     this.setPosition(new Point2D(this.getPosition().getX(), object.getPosition().getY() + object.getHitbox().getHeight()));
                 else
                     this.setPosition(new Point2D(this.getPosition().getX(), object.getPosition().getY() - this.getHitbox().getHeight()));
@@ -266,5 +266,15 @@ public abstract class GameEntity extends PhysicEntity implements Drawable {
      */
     public Direction getCurrentDirection() {
         return currentDirection;
+    }
+
+    /**
+     * Setter for the velocity to apply.
+     * @param velocity: the new velocity
+     */
+    public void setVelocity(float velocity) {
+        this.velocity = velocity;
+        if(this.currentDirection != null)
+            setDirection(this.currentDirection);
     }
 }
