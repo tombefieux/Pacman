@@ -26,8 +26,7 @@ public class Ghost extends GameEntity{
         super();
         this.velocity = Config.ghostsVelocity;
         this.setName("Ghost");
-        this.currentDirection = Direction.TOP;
-        this.setDirection(Direction.TOP);
+        this.currentDirection = null;
         this.ghostNumber = (currentGhostNb % 4);
 
         if(this.ghostNumber == 1) {
@@ -54,16 +53,6 @@ public class Ghost extends GameEntity{
                 } while (direction == this.currentDirection || areOpposite(direction, this.currentDirection));
 
                 this.setDirection(direction);
-            }
-
-            // not out
-            else {
-                if (this.currentDirection == Direction.BOTTOM)
-                    this.currentDirection = Direction.TOP;
-                else if (this.currentDirection == Direction.TOP)
-                    this.currentDirection = Direction.BOTTOM;
-
-                this.setDirection(this.currentDirection);
             }
         }
 
@@ -131,10 +120,10 @@ public class Ghost extends GameEntity{
                         try {
                             Thread.sleep(Config.timeBeforeGoOut * 1000);
                             Pacman.engine.getGate().setOpen(true);
-                            isOut = true;
                             setDirection(Direction.TOP);
-                            Thread.sleep(300);
+                            Thread.sleep(200);
                             Pacman.engine.getGate().setOpen(false);
+                            isOut = true;
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -144,13 +133,13 @@ public class Ghost extends GameEntity{
                     case 0:
                         try {
                             Thread.sleep(Config.timeBeforeGoOut * 1000 * 2);
-                            Pacman.engine.getGate().setOpen(true);
-                            isOut = true;
                             setDirection(Direction.RIGHT);
                             Thread.sleep(300);
+                            Pacman.engine.getGate().setOpen(true);
                             setDirection(Direction.TOP);
-                            Thread.sleep(600);
+                            Thread.sleep(200);
                             Pacman.engine.getGate().setOpen(false);
+                            isOut = true;
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -160,18 +149,17 @@ public class Ghost extends GameEntity{
                     case 3:
                         try {
                             Thread.sleep(Config.timeBeforeGoOut * 1000 * 3);
-                            Pacman.engine.getGate().setOpen(true);
-                            isOut = true;
                             setDirection(Direction.LEFT);
                             Thread.sleep(300);
+                            Pacman.engine.getGate().setOpen(true);
                             setDirection(Direction.TOP);
-                            Thread.sleep(600);
+                            Thread.sleep(200);
                             Pacman.engine.getGate().setOpen(false);
+                            isOut = true;
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                         break;
-
                 }
             }
         });
