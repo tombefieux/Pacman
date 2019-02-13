@@ -7,6 +7,7 @@ import Pacman.model.Drawable;
 import Pacman.model.entities.GameEntity;
 import Pacman.model.entities.Player;
 import Pacman.model.objects.Coin;
+import Pacman.model.objects.Gate;
 import Pacman.model.objects.Wall;
 
 import javafx.geometry.Point2D;
@@ -118,6 +119,14 @@ public class GameEngine extends Observable implements Runnable {
 	 */
 	public Player getPlayer() {
 		return (Player) this.physicsEngine.getObjectsByName("Player").get(0);
+	}
+
+	/**
+	 * This function returns the gate.
+	 * @return the gate
+	 */
+	public Gate getGate() {
+		return (Gate) this.physicsEngine.getObjectsByName("Gate").get(0);
 	}
 
 	/**

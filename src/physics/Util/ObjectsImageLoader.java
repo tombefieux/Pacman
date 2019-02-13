@@ -81,9 +81,9 @@ public abstract class ObjectsImageLoader {
                 // if we are not already in a rectangle
                 boolean alreadyInRectangle = false;
                 for (Rectangle rectangle : result) {
-                    if(
-                        i >= rectangle.getX() && i <= rectangle.getX() + rectangle.getWidth() &&
-                        j >= rectangle.getY() && j <= rectangle.getY() + rectangle.getHeight()
+                    if (
+                            i >= rectangle.getX() && i <= rectangle.getX() + rectangle.getWidth() &&
+                                    j >= rectangle.getY() && j <= rectangle.getY() + rectangle.getHeight()
                     )
                         alreadyInRectangle = true;
                 }

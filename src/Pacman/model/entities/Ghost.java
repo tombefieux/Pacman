@@ -1,5 +1,6 @@
 package Pacman.model.entities;
 
+import Pacman.Pacman;
 import Pacman.Util.Config;
 import Pacman.model.Direction;
 
@@ -15,7 +16,8 @@ public class Ghost extends GameEntity{
 
     private static int currentGhostNb = 0;          /** The counter for ghost number */
     private int ghostNumber;                        /** The number of the ghost (for the sprite sheet). */
-    private List<Direction> directions = null;
+    private List<Direction> directions = null;      /** The list of possible directions. */
+    private boolean isOut = false;                  /** If the ghost is out or not. */
 
     /**
      * Constructor.
@@ -24,28 +26,51 @@ public class Ghost extends GameEntity{
         super();
         this.velocity = Config.ghostsVelocity;
         this.setName("Ghost");
-        this.setDirection(getDirection());
+        this.currentDirection = Direction.TOP;
+        this.setDirection(Direction.TOP);
         this.ghostNumber = (currentGhostNb % 4);
+
+        if(this.ghostNumber == 1) {
+            isOut = true;
+            this.setDirection(getDirection());
+        }
+        else
+            waitToGoOut();
 
         currentGhostNb++;
     }
 
     @Override
     public void update(float delta) {
+
         // if we are stopped
         if(!this.isMoving()) {
-            Direction direction;
-            do {
-                 direction = getDirection();
-            } while(direction == this.currentDirection || areOpposite(direction, this.currentDirection));
 
-            this.setDirection(direction);
+            // if we are out
+            if(this.isOut) {
+                Direction direction;
+                do {
+                    direction = getDirection();
+                } while (direction == this.currentDirection || areOpposite(direction, this.currentDirection));
+
+                this.setDirection(direction);
+            }
+
+            // not out
+            else {
+                if (this.currentDirection == Direction.BOTTOM)
+                    this.currentDirection = Direction.TOP;
+                else if (this.currentDirection == Direction.TOP)
+                    this.currentDirection = Direction.BOTTOM;
+
+                this.setDirection(this.currentDirection);
+            }
         }
 
         super.update(delta);
 
         // if we have the possibility to change of direction
-        if(this.directions != null) {
+        if(this.directions != null && isOut) {
             List<Direction> directions = getPossibleDirections();
             if (!this.directions.containsAll(directions)) {
 
@@ -93,6 +118,64 @@ public class Ghost extends GameEntity{
         }
 
         return result;
+    }
+
+    private void waitToGoOut() {
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                switch (ghostNumber) {
+
+                    // the first to go out
+                    case 2:
+                        try {
+                            Thread.sleep(Config.timeBeforeGoOut * 1000);
+                            Pacman.engine.getGate().setOpen(true);
+                            isOut = true;
+                            setDirection(Direction.TOP);
+                            Thread.sleep(300);
+                            Pacman.engine.getGate().setOpen(false);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+
+                    // the second to go out
+                    case 0:
+                        try {
+                            Thread.sleep(Config.timeBeforeGoOut * 1000 * 2);
+                            Pacman.engine.getGate().setOpen(true);
+                            isOut = true;
+                            setDirection(Direction.RIGHT);
+                            Thread.sleep(300);
+                            setDirection(Direction.TOP);
+                            Thread.sleep(600);
+                            Pacman.engine.getGate().setOpen(false);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+
+                    // the second to go out
+                    case 3:
+                        try {
+                            Thread.sleep(Config.timeBeforeGoOut * 1000 * 3);
+                            Pacman.engine.getGate().setOpen(true);
+                            isOut = true;
+                            setDirection(Direction.LEFT);
+                            Thread.sleep(300);
+                            setDirection(Direction.TOP);
+                            Thread.sleep(600);
+                            Pacman.engine.getGate().setOpen(false);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+
+                }
+            }
+        });
+        t.start();
     }
 
     /**

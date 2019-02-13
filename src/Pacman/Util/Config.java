@@ -30,6 +30,7 @@ public class Config {
 
 	// ghosts
     public static final int ghostsVelocity = 110;
+    public static final int timeBeforeGoOut = 5;
 
 	// animations
 	public static final float timeBetweenAnimation = 0.1f;

@@ -5,6 +5,7 @@ import Pacman.Util.Config;
 import Pacman.model.Direction;
 import Pacman.model.Drawable;
 
+import Pacman.model.objects.Gate;
 import Pacman.model.objects.Wall;
 import javafx.geometry.Point2D;
 
@@ -184,7 +185,7 @@ public abstract class GameEntity extends PhysicEntity implements Drawable {
     public void collisionTriggeredOnSide(Side side, PhysicObject object) {
 
         // if we have hit a wall we stop the velocity
-        if(object instanceof Wall) {
+        if(object instanceof Wall && !(object instanceof Gate && ((Gate) object).isOpen())) {
             if(side == Side.TOP || side == Side.BOTTOM) {
                 this.setVelocity(new Point2D(this.getVelocity().getX(), 0));
 
@@ -214,7 +215,16 @@ public abstract class GameEntity extends PhysicEntity implements Drawable {
         setVelocityWithDirection(direction);
 
         // it's ok
-        if(Pacman.engine == null || !(Pacman.engine.willHitSomethingOnNextUpdate(this) instanceof Wall)) {
+        PhysicObject object = null;
+        if(Pacman.engine != null)
+            object = Pacman.engine.willHitSomethingOnNextUpdate(this);
+
+        if(!(object instanceof Wall)) {
+            this.currentDirection = direction;
+            this.wantToGoTo = null;
+        }
+
+        else if(object instanceof Gate && ((Gate) object).isOpen()) {
             this.currentDirection = direction;
             this.wantToGoTo = null;
         }

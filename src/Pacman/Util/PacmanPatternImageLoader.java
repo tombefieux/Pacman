@@ -3,6 +3,7 @@ package Pacman.Util;
 import Pacman.model.entities.Ghost;
 import Pacman.model.entities.Player;
 import Pacman.model.objects.Coin;
+import Pacman.model.objects.Gate;
 import Pacman.model.objects.SpecialCoin;
 import Pacman.model.objects.Wall;
 import physics.Util.ObjectsImageLoader;
@@ -19,7 +20,7 @@ public class PacmanPatternImageLoader extends ObjectsImageLoader {
      * Constructor of the class.
      */
     public PacmanPatternImageLoader() {
-        super(new int[]{18, 72, 100, 199, 255});
+        super(new int[]{18, 72, 100, 149, 199, 255});
     }
 
     // implement the function
@@ -43,6 +44,10 @@ public class PacmanPatternImageLoader extends ObjectsImageLoader {
         // special coin
         else if (color == 100)
             result = new SpecialCoin();
+
+        // the special wall
+        else if (color == 149)
+            result = new Gate();
 
         // ghost
         else if (color == 199)
