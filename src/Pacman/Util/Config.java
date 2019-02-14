@@ -27,6 +27,7 @@ public class Config {
 	public static final int PacmanVelocityValue = 100;
 	public static final int leftTelportingValue = 15;
 	public static final int rightTelportingValue = 480;
+	public static final int deadAnimationTime = 2;
 
 	// ghosts
     public static final int ghostsVelocity = 105;

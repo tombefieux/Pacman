@@ -64,33 +64,45 @@ public class GameEngine extends Observable implements Runnable {
 	public void run() {
 		while(true) {
 			// ------------------- Game loop here (the update) -----------------
-			// update the physics engine
-			this.physicsEngine.update(1 / (float) Config.FPS);
 
-            // teleport all the entities
-            for (PhysicObject object : this.physicsEngine.getObjects()) {
-                if(object instanceof GameEntity) {
-                    GameEntity entity = (GameEntity) object;
-                    // if we need to teleport us to the right
-                    if(entity.getPosition().getX() < Config.leftTelportingValue &&
-                            entity.getCurrentDirection() == Direction.LEFT
-                    ) {
-                        entity.setPosition(new Point2D(Config.rightTelportingValue - entity.getHitbox().getWidth(), entity.getHitbox().getY()));
-                    }
+			// if we are alive
+			if(this.getPlayer().isAlive()) {
 
-                    // if we need to teleport us to the left
-                    else if(entity.getPosition().getX() + entity.getHitbox().getWidth() > Config.rightTelportingValue
-                            && entity.getCurrentDirection() == Direction.RIGHT
-                    ) {
-                        entity.setPosition(new Point2D(Config.leftTelportingValue, entity.getHitbox().getY()));
-                    }
-                }
-            }
+				// update the physics engine
+				this.physicsEngine.update(1 / (float) Config.FPS);
 
-            // check if there are still coins
-            if(!isStillCoins()) {
-                // TODO: action when no coin
-            }
+				// teleport all the entities
+				for (PhysicObject object : this.physicsEngine.getObjects()) {
+					if (object instanceof GameEntity) {
+						GameEntity entity = (GameEntity) object;
+						// if we need to teleport us to the right
+						if (entity.getPosition().getX() < Config.leftTelportingValue &&
+								entity.getCurrentDirection() == Direction.LEFT
+						) {
+							entity.setPosition(new Point2D(Config.rightTelportingValue - entity.getHitbox().getWidth(), entity.getHitbox().getY()));
+						}
+
+						// if we need to teleport us to the left
+						else if (entity.getPosition().getX() + entity.getHitbox().getWidth() > Config.rightTelportingValue
+								&& entity.getCurrentDirection() == Direction.RIGHT
+						) {
+							entity.setPosition(new Point2D(Config.leftTelportingValue, entity.getHitbox().getY()));
+						}
+					}
+				}
+
+				// check if there are still coins
+				if (!isStillCoins()) {
+					// TODO: action when no coin
+				}
+			}
+
+			// if we are dead
+			else {
+				// TODO: set the engine as origin except the player (boolean just dead)
+
+				// TODO: if no more life make something
+			}
 
 			// notify that we are done
 			this.setChanged();

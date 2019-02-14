@@ -43,6 +43,7 @@ public class Pacman extends Application implements Observer {
 
 	private Image backgroundImage;								/** The background image. */
     private Image pacmanSpriteSheet;							/** The Pacman sprite sheet image. */
+    private Image pacmanDeadSpriteSheet;						/** The Pacman sprite sheet image when it dead. */
     private Image ghostsSpriteSheet;						    /** The ghosts sprite sheet image. */
     private Image blueGhostsSpriteSheet;						/** The blue ghosts sprite sheet image. */
     private Image coinSpriteSheet;							    /** The coin sprite image. */
@@ -78,6 +79,7 @@ public class Pacman extends Application implements Observer {
 		try {
 			this.backgroundImage = new Image(new FileInputStream(Config.imagePath + "background.png"));
             this.pacmanSpriteSheet = new Image(new FileInputStream(Config.imagePath + "pacman.png"));
+            this.pacmanDeadSpriteSheet = new Image(new FileInputStream(Config.imagePath + "dead.png"));
             this.ghostsSpriteSheet = new Image(new FileInputStream(Config.imagePath + "ghosts.png"));
             this.blueGhostsSpriteSheet = new Image(new FileInputStream(Config.imagePath + "blueAndWhiteGhosts.png"));
             this.coinSpriteSheet = new Image(new FileInputStream(Config.imagePath + "coin.png"));
@@ -153,16 +155,27 @@ public class Pacman extends Application implements Observer {
 
 			// player
 			if(object instanceof Player) {
-                PixelReader reader = this.pacmanSpriteSheet.getPixelReader();
+
+                PixelReader reader = null;
+
+                // if dead
+                if(!((Player) object).isAlive())
+                    reader = pacmanDeadSpriteSheet.getPixelReader();
+
+                // not dead
+			    else
+                    reader = this.pacmanSpriteSheet.getPixelReader();
+
+			    // draw image
                 this.graphicsContext.drawImage(
-                    new WritableImage(
-                        reader,
-                        object.getImageIndexInSpriteSheet() * Config.spriteSize,
-                        0,
-                        Config.spriteSize, Config.spriteSize
-                    ),
-                    temp.getPosition().getX(),
-                    temp.getPosition().getY()
+                        new WritableImage(
+                                reader,
+                                object.getImageIndexInSpriteSheet() * Config.spriteSize,
+                                0,
+                                Config.spriteSize, Config.spriteSize
+                        ),
+                        temp.getPosition().getX(),
+                        temp.getPosition().getY()
                 );
             }
 
@@ -207,6 +220,21 @@ public class Pacman extends Application implements Observer {
                     this.graphicsContext.drawImage(this.coinSpriteSheet, temp.getPosition().getX(), temp.getPosition().getY());
             }
 		}
+
+		// draw the number of live
+        PixelReader reader = this.pacmanSpriteSheet.getPixelReader();
+        for (int i = 0; i < engine.getPlayer().getLiveNb(); i++) {
+            this.graphicsContext.drawImage(
+                    new WritableImage(
+                            reader,
+                            2 * Config.spriteSize,
+                            0,
+                            Config.spriteSize, Config.spriteSize
+                    ),
+                    335 + (i * (Config.spriteSize + 7)),
+                    544
+            );
+        }
 	}
 
 	/**

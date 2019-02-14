@@ -126,7 +126,7 @@ public class Ghost extends GameEntity{
                     // the first to go out
                     case 2:
                         try {
-                            Thread.sleep(Config.timeBeforeGoOut * 1000);
+                            Thread.sleep(Config.timeBeforeGoOut / 2 * 1000);
                             setVelocity(Config.ghostsVelocity);
                             Pacman.engine.getGate().setOpen(true);
                             setDirection(Direction.TOP);
