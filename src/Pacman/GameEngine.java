@@ -35,7 +35,7 @@ public class GameEngine extends Observable implements Runnable {
 	public int ghostInBlueThreadSemaphore = 0;					/** A counter to know if there are other threads running. */
 	private Player player;										/** The player. */
 	private Gate gate;											/** The gate. */
-	private boolean justDied = false;							/** To know we were died before. */
+	private boolean justDied = true;							/** To know we were died before. */
 
 	/**
 	 * Constructor of the class.
