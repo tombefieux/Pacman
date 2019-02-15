@@ -22,8 +22,8 @@ public class Ghost extends GameEntity{
     private boolean isBlue = false;                 /** If the ghost is blue or not. */
     private List<Direction> directions = null;      /** The list of possible directions. */
     private boolean isOut = false;                  /** If the ghost is out or not. */
-    private boolean isToWhiteImage = false;          /** To know if we are in blue if we need to use the white image. */
-    private int waitToGoOutSemaphore = 0;
+    private boolean isToWhiteImage = false;         /** To know if we are in blue if we need to use the white image. */
+    private int waitToGoOutSemaphore = 0;           /** Semaphore for the wait to go out thread. */
 
     /**
      * Constructor.

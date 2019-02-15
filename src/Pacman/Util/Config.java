@@ -31,6 +31,7 @@ public class Config {
 
 	// ghosts
     public static final int ghostsVelocity = 105;
+    public static final int addVelocityValue = 2;
     public static final int ghostsVelocityInBlue = 50;
     public static final int timeBeforeGoOut = 5;
     public static final int timeInBlue = 8;

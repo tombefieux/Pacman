@@ -33,6 +33,9 @@ public class GameEngine extends Observable implements Runnable {
 	private PhysicsEngine physicsEngine;						/** The physics engine of the game. */
 	public int ghostsKilledNb = 0;								/** The number of ghosts killed in one blue sequence. */
 	public int ghostInBlueThreadSemaphore = 0;					/** A counter to know if there are other threads running. */
+	private Player player;										/** The player. */
+	private Gate gate;											/** The gate. */
+	private boolean justDied = false;							/** To know we were died before. */
 
 	/**
 	 * Constructor of the class.
@@ -51,6 +54,8 @@ public class GameEngine extends Observable implements Runnable {
 
 			PacmanPatternImageLoader engineLoader = new PacmanPatternImageLoader();
 			this.physicsEngine = engineLoader.getEngineWithPatternImage(patternImage);
+			this.player = (Player) this.physicsEngine.getObjectsByName("Player").get(0);
+			this.gate = (Gate) this.physicsEngine.getObjectsByName("Gate").get(0);
 
 		} catch (IOException e) {
 			System.out.println("Impossible to load the pattern image of the map.");
@@ -67,6 +72,20 @@ public class GameEngine extends Observable implements Runnable {
 
 			// if we are alive
 			if(this.getPlayer().isAlive()) {
+
+				// wait one second if we revive
+				if(this.justDied) {
+					// notify that we are done
+					this.setChanged();
+					this.notifyObservers("update");
+
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					this.justDied = false;
+				}
 
 				// update the physics engine
 				this.physicsEngine.update(1 / (float) Config.FPS);
@@ -93,9 +112,22 @@ public class GameEngine extends Observable implements Runnable {
 
 				// check if there are still coins
 				if (!isStillCoins()) {
-					// TODO: action when no coin
+					upLevel();    // up level
+
+					// notify that we are done
+					this.setChanged();
+					this.notifyObservers("update");
+
+					// wait one second
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
 			}
+			else
+				this.justDied = true;
 
 			// notify that we are done
 			this.setChanged();
@@ -126,7 +158,7 @@ public class GameEngine extends Observable implements Runnable {
 	 * @return the player
 	 */
 	public Player getPlayer() {
-		return (Player) this.physicsEngine.getObjectsByName("Player").get(0);
+		return this.player;
 	}
 
 	/**
@@ -134,7 +166,7 @@ public class GameEngine extends Observable implements Runnable {
 	 * @return the gate
 	 */
 	public Gate getGate() {
-		return (Gate) this.physicsEngine.getObjectsByName("Gate").get(0);
+		return this.gate;
 	}
 
 	/**
@@ -234,11 +266,28 @@ public class GameEngine extends Observable implements Runnable {
 	public void resetEntitiesPosition() {
 		// pacman
 		getPlayer().goToOriginPosition();
+		getPlayer().setDirection(Direction.LEFT);
 
 		// ghosts
 		for (PhysicObject ghost: this.physicsEngine.getObjectsByName("Ghost")) {
 			((Ghost) ghost).turnInNormal();
 			((Ghost) ghost).goToOriginPosition();
 		}
+	}
+
+	/**
+	 * This function up the level to start again but always with the same score.
+	 */
+	public void upLevel() {
+		resetEntitiesPosition();
+
+		// add velocity to the ghosts
+		for (PhysicObject ghost: this.physicsEngine.getObjectsByName("Ghost")) {
+			((Ghost) ghost).setVelocity(((Ghost) ghost).getVelocityValue() + Config.addVelocityValue);
+		}
+
+		// reset the coins
+		for (PhysicObject coin: this.physicsEngine.getObjectsByName("Coin"))
+			((Coin) coin).setTaken(false);
 	}
 }

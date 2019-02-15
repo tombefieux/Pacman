@@ -180,7 +180,7 @@ public class Pacman extends Application implements Observer {
             }
 
 			// ghost
-			else if(object instanceof Ghost) {
+			else if(engine.getPlayer().isAlive() && object instanceof Ghost) {
 			    // if blue
 			    if(((Ghost) object).isBlue()) {
                     PixelReader reader = this.blueGhostsSpriteSheet.getPixelReader();

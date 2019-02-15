@@ -280,6 +280,14 @@ public abstract class GameEntity extends PhysicEntity implements Drawable {
     }
 
     /**
+     * Getter for the velocity value of the entity.
+     * @return the velocity value of the entity
+     */
+    public float getVelocityValue() {
+        return this.velocity;
+    }
+
+    /**
      * This function move the entity to ots original position.
      */
     public abstract void goToOriginPosition();

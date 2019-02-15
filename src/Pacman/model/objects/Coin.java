@@ -35,4 +35,12 @@ public class Coin extends GameObject {
     public boolean isTaken() {
         return this.taken;
     }
+
+    /**
+     * To set the coin taken or not.
+     * @param taken: if it's taken or not
+     */
+    public void setTaken(boolean taken) {
+        this.taken = taken;
+    }
 }
