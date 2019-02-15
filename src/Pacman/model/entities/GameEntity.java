@@ -231,7 +231,8 @@ public abstract class GameEntity extends PhysicEntity implements Drawable {
 
         // not ok -> we'll do it when it'll be possible
         else {
-            setVelocityWithDirection(this.currentDirection);
+            if(this.currentDirection != null)
+                setVelocityWithDirection(this.currentDirection);
             this.wantToGoTo = direction;
         }
     }
@@ -277,4 +278,9 @@ public abstract class GameEntity extends PhysicEntity implements Drawable {
         if(this.currentDirection != null)
             setDirection(this.currentDirection);
     }
+
+    /**
+     * This function move the entity to ots original position.
+     */
+    public abstract void goToOriginPosition();
 }

@@ -1,5 +1,6 @@
 package Pacman.model.entities;
 
+import Pacman.Pacman;
 import Pacman.Util.Config;
 
 import Pacman.model.Direction;
@@ -79,7 +80,9 @@ public class Player extends GameEntity {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    setPosition(new Point2D(235, 394));
+
+                    Pacman.engine.resetEntitiesPosition();
+
                     alive = true;
                     setDirection(Direction.LEFT);
                 }
@@ -87,6 +90,11 @@ public class Player extends GameEntity {
             }
         });
         t.start();
+    }
+
+    @Override
+    public void goToOriginPosition() {
+        setPosition(new Point2D(235, 394));
     }
 
     /**

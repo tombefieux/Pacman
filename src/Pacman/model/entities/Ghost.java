@@ -23,6 +23,7 @@ public class Ghost extends GameEntity{
     private List<Direction> directions = null;      /** The list of possible directions. */
     private boolean isOut = false;                  /** If the ghost is out or not. */
     private boolean isToWhiteImage = false;          /** To know if we are in blue if we need to use the white image. */
+    private int waitToGoOutSemaphore = 0;
 
     /**
      * Constructor.
@@ -121,20 +122,23 @@ public class Ghost extends GameEntity{
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                switch (ghostNumber) {
+                waitToGoOutSemaphore++;
 
+                switch (ghostNumber) {
                     // the first to go out
                     case 2:
                         try {
                             Thread.sleep(Config.timeBeforeGoOut / 2 * 1000);
-                            setVelocity(Config.ghostsVelocity);
-                            Pacman.engine.getGate().setOpen(true);
-                            setDirection(Direction.TOP);
-                            Thread.sleep(200);
-                            Pacman.engine.getGate().setOpen(false);
-                            isOut = true;
-                            if(isBlue)
-                                setVelocity(Config.ghostsVelocityInBlue);
+                            if(waitToGoOutSemaphore == 1) {
+                                setVelocity(Config.ghostsVelocity);
+                                Pacman.engine.getGate().setOpen(true);
+                                setDirection(Direction.TOP);
+                                Thread.sleep(200);
+                                Pacman.engine.getGate().setOpen(false);
+                                isOut = true;
+                                if (isBlue)
+                                    setVelocity(Config.ghostsVelocityInBlue);
+                            }
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -144,43 +148,88 @@ public class Ghost extends GameEntity{
                     case 0:
                         try {
                             Thread.sleep(Config.timeBeforeGoOut * 1000 * 2);
-                            setVelocity(Config.ghostsVelocity);
-                            setDirection(Direction.RIGHT);
-                            Thread.sleep(300);
-                            Pacman.engine.getGate().setOpen(true);
-                            setDirection(Direction.TOP);
-                            Thread.sleep(200);
-                            Pacman.engine.getGate().setOpen(false);
-                            isOut = true;
-                            if(isBlue)
-                                setVelocity(Config.ghostsVelocityInBlue);
+                            if(waitToGoOutSemaphore == 1) {
+                                setVelocity(Config.ghostsVelocity);
+                                setDirection(Direction.RIGHT);
+                                Thread.sleep(300);
+                                Pacman.engine.getGate().setOpen(true);
+                                setDirection(Direction.TOP);
+                                Thread.sleep(200);
+                                Pacman.engine.getGate().setOpen(false);
+                                isOut = true;
+                                if (isBlue)
+                                    setVelocity(Config.ghostsVelocityInBlue);
+                            }
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                         break;
 
-                    // the second to go out
+                    // the last to go out
                     case 3:
                         try {
                             Thread.sleep(Config.timeBeforeGoOut * 1000 * 3);
-                            setVelocity(Config.ghostsVelocity);
-                            setDirection(Direction.LEFT);
-                            Thread.sleep(300);
-                            Pacman.engine.getGate().setOpen(true);
-                            setDirection(Direction.TOP);
-                            Thread.sleep(200);
-                            Pacman.engine.getGate().setOpen(false);
-                            isOut = true;
-                            if(isBlue)
-                                setVelocity(Config.ghostsVelocityInBlue);
+                            if(waitToGoOutSemaphore == 1) {
+                                setVelocity(Config.ghostsVelocity);
+                                setDirection(Direction.LEFT);
+                                Thread.sleep(300);
+                                Pacman.engine.getGate().setOpen(true);
+                                setDirection(Direction.TOP);
+                                Thread.sleep(200);
+                                Pacman.engine.getGate().setOpen(false);
+                                isOut = true;
+                                if (isBlue)
+                                    setVelocity(Config.ghostsVelocityInBlue);
+                            }
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                         break;
                 }
+
+                waitToGoOutSemaphore--;
             }
         });
         t.start();
+    }
+
+    @Override
+    public void goToOriginPosition() {
+
+        // reset direction stuffs
+        this.currentDirection = null;
+        this.wantToGoTo = null;
+        this.setVelocity(new Point2D(0, 0));
+
+        switch (this.ghostNumber) {
+            // already out
+            case 1:
+                setPosition(new Point2D(235, 194));
+                this.setDirection(getDirection());
+                this.isOut = true;
+                break;
+
+            // the first to go out
+            case 2:
+                setPosition(new Point2D(235, 245));
+                this.isOut = false;
+                break;
+
+            // the second to go out
+            case 0:
+                setPosition(new Point2D(202, 245));
+                this.isOut = false;
+                break;
+
+            // the last to go out
+            case 3:
+                setPosition(new Point2D(268, 245));
+                this.isOut = false;
+                break;
+        }
+
+        // wait to go out
+        waitToGoOut();
     }
 
     // get the good index if we are in blue or white

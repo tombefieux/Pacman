@@ -97,13 +97,6 @@ public class GameEngine extends Observable implements Runnable {
 				}
 			}
 
-			// if we are dead
-			else {
-				// TODO: set the engine as origin except the player (boolean just dead)
-
-				// TODO: if no more life make something
-			}
-
 			// notify that we are done
 			this.setChanged();
 			this.notifyObservers("update");
@@ -233,5 +226,19 @@ public class GameEngine extends Observable implements Runnable {
 			}
 		});
 		t.start();
+	}
+
+	/**
+	 * This function move the entities to their original position.
+	 */
+	public void resetEntitiesPosition() {
+		// pacman
+		getPlayer().goToOriginPosition();
+
+		// ghosts
+		for (PhysicObject ghost: this.physicsEngine.getObjectsByName("Ghost")) {
+			((Ghost) ghost).turnInNormal();
+			((Ghost) ghost).goToOriginPosition();
+		}
 	}
 }
