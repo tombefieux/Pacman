@@ -20,6 +20,8 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import physics.objects.PhysicObject;
@@ -114,6 +116,8 @@ public class Pacman extends Application implements Observer {
 		root.getChildren().add(canvas);
 
 		this.graphicsContext = canvas.getGraphicsContext2D();
+		this.graphicsContext.setFill(Color.WHITE);
+		this.graphicsContext.setFont(Font.font(20));
 
 		// handle on close event to stop the game engine thread
 		theStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -220,6 +224,9 @@ public class Pacman extends Application implements Observer {
                     this.graphicsContext.drawImage(this.coinSpriteSheet, temp.getPosition().getX(), temp.getPosition().getY());
             }
 		}
+
+		// draw the score
+        this.graphicsContext.fillText(engine.getCurrentScore() + "", 115, 565);
 
 		// draw the number of live
         PixelReader reader = this.pacmanSpriteSheet.getPixelReader();

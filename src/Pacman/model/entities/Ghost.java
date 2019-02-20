@@ -247,8 +247,10 @@ public class Ghost extends GameEntity{
     public void collisionTriggeredOnSide(Side side, PhysicObject object) {
         super.collisionTriggeredOnSide(side, object);
 
-        if(object instanceof Player && this.isBlue)
+        if(object instanceof Player && this.isBlue) {
             killIt();
+            Pacman.engine.addScore(Config.pointsWhenGhostEaten);
+        }
     }
 
     /**

@@ -1,5 +1,7 @@
 package Pacman.model.objects;
 
+import Pacman.Pacman;
+import Pacman.Util.Config;
 import Pacman.model.entities.Player;
 import physics.Side;
 import physics.objects.PhysicObject;
@@ -24,8 +26,10 @@ public class Coin extends GameObject {
     // collision
     @Override
     public void collisionTriggeredOnSide(Side side, PhysicObject object) {
-        if (!this.taken && object instanceof Player)
+        if (!this.taken && object instanceof Player) {
             this.taken = true;
+            Pacman.engine.addScore(Config.pointsWhenCoinEaten);
+        }
     }
 
     /**

@@ -36,6 +36,7 @@ public class GameEngine extends Observable implements Runnable {
 	private Player player;										/** The player. */
 	private Gate gate;											/** The gate. */
 	private boolean justDied = true;							/** To know we were died before. */
+	private int currentScore;                                   /** The current score. */
 
 	/**
 	 * Constructor of the class.
@@ -290,4 +291,20 @@ public class GameEngine extends Observable implements Runnable {
 		for (PhysicObject coin: this.physicsEngine.getObjectsByName("Coin"))
 			((Coin) coin).setTaken(false);
 	}
+
+    /**
+     * Getter for the score.
+     * @return the current score
+     */
+    public int getCurrentScore() {
+        return currentScore;
+    }
+
+    /**
+     * Add a score to the game.
+     * @param value: the score value to add
+     */
+    public void addScore(int value) {
+        this.currentScore += value;
+    }
 }

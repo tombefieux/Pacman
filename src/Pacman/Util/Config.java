@@ -28,15 +28,18 @@ public class Config {
 	public static final int leftTelportingValue = 15;
 	public static final int rightTelportingValue = 480;
 	public static final int deadAnimationTime = 2;
+	public static final int pointsWhenCoinEaten = 10;
 
 	// ghosts
-    public static final int ghostsVelocity = 105;
-    public static final int addVelocityValue = 2;
-    public static final int ghostsVelocityInBlue = 50;
-    public static final int timeBeforeGoOut = 5;
-    public static final int timeInBlue = 8;
-    public static final int timeToWaitWhenDead = 1000;	// in milliseconds
+	public static final int ghostsVelocity = 105;
+	public static final int addVelocityValue = 2;
+	public static final int ghostsVelocityInBlue = 50;
+	public static final int timeBeforeGoOut = 5;
+	public static final int timeInBlue = 8;
+	public static final int timeToWaitWhenDead = 1000;	// in milliseconds
 	public static final int endAnimationTime = 2;
+	public static final int pointsWhenGhostEaten = 400;
+
 
 	// animations
 	public static final float timeBetweenAnimation = 0.1f;
