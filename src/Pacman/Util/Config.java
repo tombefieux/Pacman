@@ -1,7 +1,5 @@
 package Pacman.Util;
 
-import Pacman.Pacman;
-
 /**
  * A simple configuration class with constants.
  * @author Tom
@@ -36,7 +34,7 @@ public class Config {
 	public static final int ghostsVelocityInBlue = 50;
 	public static final int timeBeforeGoOut = 5;
 	public static final int timeInBlue = 8;
-	public static final int timeToWaitWhenDead = 1000;	// in milliseconds
+	public static final int timeToWaitWhenDead = 500;	// in milliseconds
 	public static final int endAnimationTime = 2;
 	public static final int pointsWhenGhostEaten = 400;
 
