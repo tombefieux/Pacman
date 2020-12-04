@@ -10,7 +10,6 @@ import Pacman.model.entities.Player;
 import Pacman.model.objects.Coin;
 import Pacman.model.objects.Gate;
 import Pacman.model.objects.Wall;
-
 import javafx.geometry.Point2D;
 import physics.PhysicsEngine;
 import physics.objects.PhysicEntity;
@@ -66,7 +65,6 @@ public class GameEngine extends Observable implements Runnable {
 	/**
 	 * See Runnable.run()
 	 */
-	@Override
 	public void run() {
 		while(true) {
 			// ------------------- Game loop here (the update) -----------------
